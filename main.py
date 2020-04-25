@@ -14,6 +14,7 @@ from flask import request, redirect
 from flask import Flask, request, redirect
 from twilio.twiml.messaging_response import MessagingResponse
 from twilio.twiml.voice_response import Record, VoiceResponse, Gather
+from xml.etree import ElementTree
 
 
 app = Flask(__name__)
@@ -72,8 +73,9 @@ def handleVoice():
             resp.say("Sorry, I dint understand the input")
             return ""
 
-    return ""
-
+    xmlrep = "<?xml version='1.0' encoding='UTF-8'?><Response><Hangup/></Response>"
+    tree = ElementTree.fromstring(xmlrep)
+    return xmlrep
 
 @app.route("/handleVoiceResponse", methods=['GET', 'POST'])
 def handleVoiceREsponse():
@@ -98,9 +100,13 @@ def handleVoiceREsponse():
     if gotreply==False:
         replytext = "Thank you for calling. Currently all our helpers are busy, we will reach back to you soon."
 
-    resp.say(replytext, voice='alice', language="en-US")
+    resp.play('https://api.twilio.com/cowbell.mp3', loop=5)
+    #resp3.say("ok, bye. Good night.", voice='alice', language="en-US")
+    print("here is the reply",resp)
+    xmlrep = "<?xml version='1.0' encoding='UTF-8'?><Response><Hangup/></Response>"
+    tree = ElementTree.fromstring(xmlrep)
+    return xmlrep
 
-    return 'Success'
 
 if __name__=="__main__":
     app.run(debug=True)
