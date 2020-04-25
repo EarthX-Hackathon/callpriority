@@ -75,7 +75,32 @@ def handleVoice():
 	return ""
 
 
+@app.route("/handleVoiceResponse", methods=['GET', 'POST'])
+def handleVoiceREsponse
+    resp = VoiceResponse()
+    soundURL = (request.values['RecordingUrl'])
+    print (request.values)
+    calltext = request.values['TranscriptionText']
+    replytext =''
+    gotreply = False
 
+	with open('FAQ.csv', encoding="utf8") as csv_file:
+		csv_reader=csv.reader(csv_file , delimiter=',')
+
+		for row in csv_reader:
+			similarity = nlp(row[0].lower()).similarity(nlp(calltext.lower()))
+			print (similarity)
+			print (str(calltext), str(row[0]))
+			if similarity > 0.80:
+                gotreply = True
+                replytext = str(row[1])
+
+    if gotreply==False:
+        replytext = "Thank you for calling. Currently all our helpers are busy, we will reach back to you soon."
+
+    resp.say(replytext, voice='alice', language="en-US")
+
+    return 'Success'
 
 if __name__=="__main__":
     app.run(debug=True)
