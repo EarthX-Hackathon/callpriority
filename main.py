@@ -18,6 +18,8 @@ from twilio.twiml.voice_response import Record, VoiceResponse, Gather
 from xml.etree import ElementTree
 from twilio.rest import Client
 
+import logging
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 
 app = Flask(__name__)
 
@@ -121,19 +123,25 @@ def handleVoiceResponse():
 @app.route("/recordAndSend", methods=['GET','POST'])
 def recordAndSend():
     resp = VoiceResponse()
-    choice = request.values['Digits']
 
-    if choice == '1':
-        resp.say("Hi, how can I help you today?", voice='alice', language="en-US")
-        resp.record(maxLength = 20,timeout=10, transcribe=True, transcribeCallback="/handleVoiceResponse")
+    if 'Digits' in request.values:
+        choice = request.values['Digits']
+
+        if choice == '1':
+            resp.say("Hi, how can I help you today?", voice='alice', language="en-US")
+            resp.record(maxLength = 20,timeout=10, transcribe=True, transcribeCallback="/handleVoiceResponse")
+
+            print (resp)
+            return str(resp)
+
+        if choice == '2':
+            resp.say("Please stay online.", voice='alice', language="en-US")
+            resp.hangup()
+
+    else:
         resp.say("We got your msg. Thank you.", voice='alice', language="en-US")
         resp.hangup()
-        print (resp)
-        return str(resp)
 
-    if choice == '2':
-        resp.say("Please stay online.", voice='alice', language="en-US")
-        resp.hangup()
     return str(resp)
 
 '''
