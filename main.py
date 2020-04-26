@@ -145,7 +145,7 @@ def recordAndSend():
             resp.hangup()
 
     else:
-        resp.say("We got your msg. Thank you.", voice='alice', language="en-US")
+        resp.say("We have recieved your message. Someone will follow up with you soon. Thank you.", voice='alice', language="en-US")
         resp.hangup()
 
     return str(resp)
