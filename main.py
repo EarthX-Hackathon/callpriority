@@ -60,16 +60,20 @@ def handleVoice():
             return str(resp2)
 
         elif choice == '2':
-            resp2.say("Hola como puedo ayudarte hoy?", voice='alice', language="es-MX")
+            gg =Gather(num_digits=1, action='/recordAndSend')
+            gg.say("Hola, todos nuestros agentes están ocupados en este momento. Si su consulta no es urgente, ¿desea dejarnos un mensaje? Nos pondremos en contacto con usted con la respuesta muy pronto. Presione 1 para dejar un mensaje. Presione 2 para esperar al agente.", voice='alice', language="es-MX")
 
-            resp2.record(timeout=5, transcribe=True, transcribeCallback="/handleVoiceResponse")
+            resp2.append(gg)
+
             print(resp2)
             return str(resp2)
 
         elif choice == '3':
-            resp2.say("嗨，我今天怎么能帮到你？", voice='alice', language="zh-CN")
+            gg =Gather(num_digits=1, action='/recordAndSend')
+            gg.say("嗨，我们所有的经纪人现在都在忙。如果您的查询不紧急，您想给我们留言吗？我们会尽快回复您。按1离开留言。按2等待代理。", voice='alice', language="zh-CN")
 
-            resp2.record(maxLength = 20, timeout=5, transcribe=True, transcribeCallback="/handleVoiceResponse")
+            resp2.append(gg)
+
             print(resp2)
             return str(resp2)
 
@@ -102,16 +106,18 @@ def handleVoiceResponse():
                 replytext = str(row[1])
 
     if gotreply==False:
-        replytext = "Po was not able to answer your query. Our agents will reach you soon."
+        replytext = "Jake was not able to answer your query. Our agents will reach you soon."
 
+    print("what caller said--------", calltext)
     print("reply text is ------", replytext)
 
     account_sid = 'AC81bcf045adf8efd2d60103cec297bdef'
     auth_token = '744d9857238e1d524cee6f6d349deac7'
     client = Client(account_sid, auth_token)
+    msgBody = "Hi! This is Jake from State farm. Answer to your query - " + replytext
 
     message = client.messages.create(
-                              body=replytext,
+                              body=msgBody,
                               from_='+12056354001',
                               to=caller
                           )
