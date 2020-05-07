@@ -111,8 +111,8 @@ def handleVoiceResponse():
     print("what caller said--------", calltext)
     print("reply text is ------", replytext)
 
-    account_sid = 'AC81bcf045adf8efd2d60103cec297bdef'
-    auth_token = '744d9857238e1d524cee6f6d349deac7'
+    account_sid = 'Enter your sid'
+    auth_token = 'enter auth toke'
     client = Client(account_sid, auth_token)
     msgBody = "Hi! This is Jake from State farm. Answer to your query - " + replytext
 
